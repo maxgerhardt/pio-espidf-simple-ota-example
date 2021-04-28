@@ -2,7 +2,7 @@
 
 ## Description 
 
-This is the `simple_ota_example` in a PlatformIO compilable format. Also, the HTTPS server script was adapted to run without dependencies.
+This is the `simple_ota_example` from [esp-idf](https://github.com/espressif/esp-idf/tree/v4.2/examples/system/ota/simple_ota_example) in a PlatformIO compilable format. Also, the HTTPS server script was adapted to run without dependencies.
 
 Also see https://community.platformio.org/t/esp32-ota-default-examples-dont-work-in-platformio/20866. 
 
