@@ -32,6 +32,8 @@ https://<your IP here>:8070/hello-world.bin
 
 Also, check the "Skip server certificate CN fieldcheck" option, as otherwise the SSL connection doesn't go through (seems mis-configured from the Espressif side..)
 
+The parititon table "partitions_two_ota.csv" should be preconfigured in the "Partition Table" section, but you can double-check.
+
 A `hello-world.bin` example firmware is supplied (that does OTA again). You can change this file to any other you want, e.g. compile an Arduino blink sketch using PlatformIO and use the `.pio\build\<environment>\firmware.bin` file. 
 
 ## HTTPS server
