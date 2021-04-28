@@ -18,6 +18,8 @@ pio run -t menuconfig
 
 to enter the menuconfig tool. Remember the caveat to navigate up/down with the J/K keys.
 
+![config.png](config.png)
+
 In there, you'll want to go in to the "Example Connection Configuration" and type in your WiFi SSID and password details.
 
 Further, in the section "Example Configuration", change the "firmware upgrade url endpoint" to the URL where the new firmware `.bin` file should be fetched from. 
@@ -43,7 +45,7 @@ It should output the local IP address that it's started at and what folder it is
 Starting HTTPS server at https://192.168.1.180:8070 serving folder C:\Users\Max\temp\esp-idf\examples\system\ota\simple_ota_example\http_server_root
 ```
 
-Open the URL in the browser, accept the TLS warning (since it's a self-signed certificate) and you should see a directory listing.
+Open the URL in the browser, accept the TLS warning (since it's a self-signed certificate) and you should see a directory listing. The folder that is served is the `http_server_root` folder contained in this project -- all files and folders stored in there will be exposed by the HTTPS server.
 
 ![grafik.png](grafik.png)
 
