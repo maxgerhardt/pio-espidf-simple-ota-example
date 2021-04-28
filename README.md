@@ -8,7 +8,7 @@ Also see https://community.platformio.org/t/esp32-ota-default-examples-dont-work
 
 ## Configuration
 
-Import the project via PlatformIO Home -> Open Project -> <this repo>. 
+Import the project via PlatformIO Home -> Open Project -> *this repo*. 
 
 Then, [as documented](https://docs.platformio.org/en/latest/frameworks/espidf.html#configuration), open a [CLI](https://docs.platformio.org/en/latest/integration/ide/vscode.html#platformio-core-cli) and execute
 
