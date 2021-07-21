@@ -29,7 +29,7 @@ static const char *TAG = "simple_ota_example";
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
 extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
 
-#define OTA_URL_SIZE 256 
+#define OTA_URL_SIZE 256
 
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 {
@@ -67,6 +67,7 @@ void simple_ota_example_task(void *pvParameter)
         .url = CONFIG_EXAMPLE_FIRMWARE_UPGRADE_URL,
         .cert_pem = (char *)server_cert_pem_start,
         .event_handler = _http_event_handler,
+        .keep_alive_enable = true,
     };
 
 #ifdef CONFIG_EXAMPLE_FIRMWARE_UPGRADE_URL_FROM_STDIN
