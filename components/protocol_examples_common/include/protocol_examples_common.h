@@ -9,24 +9,35 @@
 
 #pragma once
 
+#include "sdkconfig.h"
+#include "esp_err.h"
+#if !CONFIG_IDF_TARGET_LINUX
+#include "esp_netif.h"
+#if CONFIG_EXAMPLE_CONNECT_ETHERNET
+#include "esp_eth.h"
+#endif
+#endif // !CONFIG_IDF_TARGET_LINUX
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "esp_err.h"
-#include "esp_netif.h"
-
-#ifdef CONFIG_EXAMPLE_CONNECT_ETHERNET
-#define EXAMPLE_INTERFACE get_example_netif()
+#if !CONFIG_IDF_TARGET_LINUX
+#if CONFIG_EXAMPLE_CONNECT_WIFI
+#define EXAMPLE_NETIF_DESC_STA "example_netif_sta"
 #endif
 
-#ifdef CONFIG_EXAMPLE_CONNECT_WIFI
-#define EXAMPLE_INTERFACE get_example_netif()
+#if CONFIG_EXAMPLE_CONNECT_ETHERNET
+#define EXAMPLE_NETIF_DESC_ETH "example_netif_eth"
 #endif
 
-#if !defined (CONFIG_EXAMPLE_CONNECT_ETHERNET) && !defined (CONFIG_EXAMPLE_CONNECT_WIFI)
-// This is useful for some tests which do not need a network connection
-#define EXAMPLE_INTERFACE NULL
+/* Example default interface, prefer the ethernet one if running in example-test (CI) configuration */
+#if CONFIG_EXAMPLE_CONNECT_ETHERNET
+#define EXAMPLE_INTERFACE get_example_netif_from_desc(EXAMPLE_NETIF_DESC_ETH)
+#define get_example_netif() get_example_netif_from_desc(EXAMPLE_NETIF_DESC_ETH)
+#elif CONFIG_EXAMPLE_CONNECT_WIFI
+#define EXAMPLE_INTERFACE get_example_netif_from_desc(EXAMPLE_NETIF_DESC_STA)
+#define get_example_netif() get_example_netif_from_desc(EXAMPLE_NETIF_DESC_STA)
 #endif
 
 /**
@@ -60,15 +71,6 @@ esp_err_t example_disconnect(void);
 esp_err_t example_configure_stdin_stdout(void);
 
 /**
- * @brief Returns esp-netif pointer created by example_connect()
- *
- * @note If multiple interfaces active at once, this API return NULL
- * In that case the get_example_netif_from_desc() should be used
- * to get esp-netif pointer based on interface description
- */
-esp_netif_t *get_example_netif(void);
-
-/**
  * @brief Returns esp-netif pointer created by example_connect() described by
  * the supplied desc field
  *
@@ -77,6 +79,29 @@ esp_netif_t *get_example_netif(void);
  *
  */
 esp_netif_t *get_example_netif_from_desc(const char *desc);
+
+#if CONFIG_EXAMPLE_PROVIDE_WIFI_CONSOLE_CMD
+/**
+ * @brief Register wifi connect commands
+ *
+ * Provide a simple wifi_connect command in esp_console.
+ * This function can be used after esp_console is initialized.
+ */
+void example_register_wifi_connect_commands(void);
+#endif
+
+#if CONFIG_EXAMPLE_CONNECT_ETHERNET
+/**
+ * @brief Get the example Ethernet driver handle
+ *
+ * @return esp_eth_handle_t
+ */
+esp_eth_handle_t get_example_eth_handle(void);
+#endif // CONFIG_EXAMPLE_CONNECT_ETHERNET
+
+#else
+static inline esp_err_t example_connect(void) {return ESP_OK;}
+#endif // !CONFIG_IDF_TARGET_LINUX
 
 #ifdef __cplusplus
 }
