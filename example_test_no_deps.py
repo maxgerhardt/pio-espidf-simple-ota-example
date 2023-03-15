@@ -93,9 +93,9 @@ def start_https_server(ota_image_dir, server_ip, server_port):
     httpd = BaseHTTPServer.HTTPServer((server_ip, server_port),
                                       SimpleHTTPRequestHandler)
 
-    httpd.socket = ssl.wrap_socket(httpd.socket,
-                                   keyfile=key_file,
-                                   certfile=server_file, server_side=True)
+    ssl_ctx = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_SERVER)
+    ssl_ctx.load_cert_chain(certfile=server_file, keyfile=key_file)
+    httpd.socket = ssl_ctx.wrap_socket(httpd.socket, server_side=True)
     print("Starting HTTPS server at https://" + str(server_ip) + ":" + str(server_port) + " serving folder " + str(ota_image_dir))
     httpd.serve_forever()
 
