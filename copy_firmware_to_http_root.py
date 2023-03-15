@@ -1,12 +1,14 @@
 Import("env")
-import shutil
-from pathlib import Path
-
-def post_program_action(source, target, env):
-    print("Copying program to http root")
-    program_path = target[0].get_abspath()
-    print("Program path", program_path)
-    target_path = Path(env.subst("$PROJECT_DIR")) / "http_server_root" / "hello-world.bin"
-    shutil.copy(src=program_path, dst=target_path)
-
-env.AddPostAction("$BUILD_DIR/${PROGNAME}.bin", post_program_action)
+board = env.BoardConfig()
+mcu = board.get("build.mcu", "esp32")
+env.AddPostAction(
+    "$BUILD_DIR/${PROGNAME}.elf",
+    env.VerboseAction(" ".join([
+        '"$PYTHONEXE" "$OBJCOPY"',
+        "--chip", mcu, "elf2image",
+        "--flash_mode", "${__get_board_flash_mode(__env__)}",
+        "--flash_freq", "${__get_board_f_flash(__env__)}",
+        "--flash_size", board.get("upload.flash_size", "4MB"),
+        "-o", "$PROJECT_DIR/http_server_root/hello-world.bin", "$BUILD_DIR/${PROGNAME}.elf"
+    ]), "Building $PROJECT_DIR/http_server_root/hello-world.bin")
+)
