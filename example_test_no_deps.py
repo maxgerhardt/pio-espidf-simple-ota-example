@@ -85,8 +85,8 @@ def start_https_server(ota_image_dir, server_ip, server_port):
     cert_file_handle.write(server_cert)
     cert_file_handle.close()
 
-    key_file = os.path.join(ota_image_dir, "server_key.pem")
-    key_file_handle = open("server_key.pem", "w+")
+    key_file = os.path.join("..", "server_key.pem")
+    key_file_handle = open(key_file, "w+")
     key_file_handle.write(server_key)
     key_file_handle.close()
 

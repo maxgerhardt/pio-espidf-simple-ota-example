@@ -4,3 +4,4 @@
 .vscode/launch.json
 .vscode/ipch
 sdkconfig.esp32dev*
+server_key.pem
